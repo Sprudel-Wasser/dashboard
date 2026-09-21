@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pflanzen Dashboard</title>
+    <title>Plant-Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
@@ -26,16 +26,14 @@
 
 <body>
     <div class="card">
-        <h2>Bodenfeuchtigkeit (Letzte 24 Stunden)</h2>
+        <h2>Soil-Moisture (Last 24 hours)</h2>
         <canvas id="moistureChart"></canvas>
     </div>
 
     <script>
-        // --- DEINE THINGSPEAK DATEN HIER EINTRAGEN ---
         const CHANNEL_ID = '3502548';
         const READ_API_KEY = 'DG07N96EBR9D6EMK';
 
-        // Holt dynamisch alle Werte der letzten 24 Stunden (1440 Minuten)
         const url = `https://api.thingspeak.com/channels/${CHANNEL_ID}/feeds.json?api_key=${READ_API_KEY}&minutes=1440`;
 
         const ctx = document.getElementById('moistureChart').getContext('2d');
@@ -44,7 +42,6 @@
             data: {
                 labels: [],
                 datasets: [
-                    // pointRadius: 0 blendet die störenden Punkte bei großen Datenmengen aus
                     { label: 'Ficus-Microcarpa (%)', data: [], borderColor: '#3b82f6', tension: 0.3, pointRadius: 0 },
                     { label: 'Coffee-Plant (%)', data: [], borderColor: '#10b981', tension: 0.3, pointRadius: 0 }
                 ]
@@ -65,7 +62,6 @@
                 const plant2 = [];
 
                 data.feeds.forEach(feed => {
-                    // Zeit in lesbares Format umwandeln (z.B. 14:00)
                     const date = new Date(feed.created_at);
                     labels.push(date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }));
 
@@ -82,10 +78,8 @@
             }
         }
 
-        // 1. Daten sofort beim Laden der Seite abrufen
         fetchThingSpeakData();
 
-        // 2. Daten ab sofort automatisch alle 16 Sekunden (16000 ms) aktualisieren
         setInterval(fetchThingSpeakData, 16000);
     </script>
 </body>
